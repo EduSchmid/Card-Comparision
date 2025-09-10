@@ -39,10 +39,6 @@
         }
 
         .carousel-track {
-            /* PONTO DA CORREÇÃO: Removemos 'position: absolute' para que o trilho seja
-               centralizado pelo flexbox do pai (.carousel-container).
-               Adicionamos 'position: relative' para que ele seja a referência
-               para o posicionamento absoluto dos itens do carrossel. */
             position: relative;
             transform-style: preserve-3d;
             transition: none;
@@ -55,14 +51,12 @@
 
         .carousel-item {
             position: absolute;
-            /* Os itens agora são posicionados em relação ao trilho centralizado */
             width: 200px;
             height: auto;
             border-radius: 1rem;
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
             transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-            /* Adicionado para centralizar a imagem dentro do espaço do item antes de transformar */
             transform: translate(-50%, -50%);
         }
         
@@ -91,7 +85,6 @@
 </head>
 <body class="bg-gray-900 text-gray-100">
 
-    <!-- Navbar -->
     <nav class="bg-gray-800 shadow-lg sticky top-0 z-50">
         <div class="container mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
@@ -106,34 +99,27 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
     <main class="flex flex-col items-center justify-center space-y-6 py-6 container mx-auto px-4">
         <h1 class="text-4xl md:text-5xl font-extrabold text-center">Explore os Melhores Cartões para Acumular Milhas</h1>
         
-        <!-- Novo wrapper para o carrossel, que agora está no fluxo do documento -->
         <div class="carousel-wrapper">
             <div class="carousel-container">
                 <div id="carousel-track" class="carousel-track">
-                    <!-- Itens do carrossel são inseridos aqui pelo JS -->
-                </div>
+                    </div>
             </div>
         </div>
 
-        <!-- Botão de Simulação Adicionado -->
         <a href="simulador.html" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition-transform transform hover:scale-105">
             Simule o melhor cartão para mim
         </a>
     </main>
 
-    <!-- Seção de Tabela Comparativa -->
     <section class="container mx-auto px-4 sm:px-6 py-12">
         <h2 class="text-3xl md:text-4xl font-extrabold text-center mb-12">Comparativo de Benefícios</h2>
         <div id="comparison-table" class="bg-gray-800 rounded-lg shadow-xl p-4 sm:p-6 overflow-x-auto">
-            <!-- Tabela será gerada aqui via JavaScript -->
-        </div>
+            </div>
     </section>
 
-    <!-- Seção do Botão Final -->
     <section class="container mx-auto text-center py-12 px-4">
         <h3 class="text-2xl font-bold mb-4">Pronto para encontrar seu cartão ideal?</h3>
         <a href="simulador.html" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-10 rounded-lg text-xl transition-transform transform hover:scale-105 inline-block">
@@ -141,419 +127,209 @@
         </a>
     </section>
 
+    <script src="database.js"></script>
+
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const cardData = [
-                {
-                    name: 'Azul Itaú Visa Infinite',
-                    image: 'https://i.imgur.com/Ry7Dt14.png',
-                    anuidade: 'R$ 1.200',
-                    isencaoAnuidade: 'R$ 20.000',
-                    pontosDomestico: '3.0',
-                    pontosInternacional: '3.5',
-                    embarquePrioritario: 'Sim',
-                    salasVips: 'Sim',
-                    bagagensNacional: '3',
-                    bagagensInternacional: '3',
-                    expiracao: 'Não expiram',
-                    vooCortesia: 'Sim',
-                    acelerador: 'Sim',
-                    clubes: 'Sim'
-                },
-                {
-                    name: 'Azul Itaú Platinum',
-                    image: 'https://i.imgur.com/NxEYy3Y.png',
-                    anuidade: 'R$ 900',
-                    isencaoAnuidade: 'R$ 4.000',
-                    pontosDomestico: '2.2',
-                    pontosInternacional: '2.6',
-                    embarquePrioritario: 'Sim',
-                    salasVips: 'Sim',
-                    bagagensNacional: '3',
-                    bagagensInternacional: '2',
-                    expiracao: '24 meses',
-                    vooCortesia: 'Não',
-                    acelerador: 'Sim',
-                    clubes: 'Sim'
-                },
-                {
-                    name: 'Azul Itaú Gold',
-                    image: 'https://i.imgur.com/4eVr2n9.png',
-                    anuidade: 'R$ 504',
-                    isencaoAnuidade: 'R$ 2.000',
-                    pontosDomestico: '1.7',
-                    pontosInternacional: '2.0',
-                    embarquePrioritario: 'Sim',
-                    salasVips: 'Não',
-                    bagagensNacional: '2',
-                    bagagensInternacional: '1',
-                    expiracao: '24 meses',
-                    vooCortesia: 'Não',
-                    acelerador: 'Sim',
-                    clubes: 'Sim'
-                },
-                {
-                    name: 'Azul Itaú Internacional',
-                    image: 'https://i.imgur.com/fQgOexM.png',
-                    anuidade: 'R$ 420',
-                    isencaoAnuidade: 'Não disponível',
-                    pontosDomestico: '1.4',
-                    pontosInternacional: '1.5',
-                    embarquePrioritario: 'Não',
-                    salasVips: 'Não',
-                    bagagensNacional: '1',
-                    bagagensInternacional: '1',
-                    expiracao: '24 meses',
-                    vooCortesia: 'Não',
-                    acelerador: 'Não',
-                    clubes: 'Não'
-                },
-                {
-                    name: 'LATAM Pass Black',
-                    image: 'https://i.imgur.com/yG34Xdd.png',
-                    anuidade: 'R$ 1.200',
-                    isencaoAnuidade: 'R$ 20.000',
-                    pontosDomestico: '2.5',
-                    pontosInternacional: '3.5',
-                    embarquePrioritario: 'Sim',
-                    salasVips: 'Sim',
-                    bagagensNacional: '3',
-                    bagagensInternacional: '3',
-                    expiracao: 'Não expiram',
-                    vooCortesia: 'Sim',
-                    acelerador: 'Sim',
-                    clubes: 'Sim'
-                },
-                {
-                    name: 'LATAM Pass Platinum',
-                    image: 'https://i.imgur.com/dBO5kuh.png',
-                    anuidade: 'R$ 744',
-                    isencaoAnuidade: 'R$ 4.000',
-                    pontosDomestico: '2.0',
-                    pontosInternacional: '2.0',
-                    embarquePrioritario: 'Sim',
-                    salasVips: 'Sim',
-                    bagagensNacional: '2',
-                    bagagensInternacional: '2',
-                    expiracao: '24 meses',
-                    vooCortesia: 'Não',
-                    acelerador: 'Sim',
-                    clubes: 'Sim'
-                },
-                {
-                    name: 'LATAM Pass Gold',
-                    image: 'https://i.imgur.com/9dJkjJ7.png',
-                    anuidade: 'R$ 504',
-                    isencaoAnuidade: 'R$ 2.000',
-                    pontosDomestico: '1.6',
-                    pontosInternacional: '1.6',
-                    embarquePrioritario: 'Não',
-                    salasVips: 'Não',
-                    bagagensNacional: '1',
-                    bagagensInternacional: '1',
-                    expiracao: '24 meses',
-                    vooCortesia: 'Não',
-                    acelerador: 'Sim',
-                    clubes: 'Sim'
-                },
-                {
-                    name: 'LATAM Pass Internacional',
-                    image: 'https://i.imgur.com/3hRyktn.png',
-                    anuidade: 'R$ 396',
-                    isencaoAnuidade: 'Não disponível',
-                    pontosDomestico: '1.3',
-                    pontosInternacional: '1.3',
-                    embarquePrioritario: 'Não',
-                    salasVips: 'Não',
-                    bagagensNacional: '0',
-                    bagagensInternacional: '0',
-                    expiracao: '12 meses',
-                    vooCortesia: 'Não',
-                    acelerador: 'Não',
-                    clubes: 'Não'
-                },
-                {
-                    name: 'Gol Smiles Visa Infinite',
-                    image: 'https://i.imgur.com/kJgbRvx.png',
-                    anuidade: 'R$ 1.428',
-                    isencaoAnuidade: 'R$ 8.000',
-                    pontosDomestico: '3.0',
-                    pontosInternacional: '5.5',
-                    embarquePrioritario: 'Sim',
-                    salasVips: 'Sim',
-                    bagagensNacional: '1',
-                    bagagensInternacional: '1',
-                    expiracao: 'Não expiram',
-                    vooCortesia: 'Não',
-                    acelerador: 'Sim',
-                    clubes: 'Sim'
-                },
-                {
-                    name: 'Gol Smiles Platinum',
-                    image: 'https://i.imgur.com/43DvHAP.png',
-                    anuidade: 'R$ 692',
-                    isencaoAnuidade: 'R$ 4.000',
-                    pontosDomestico: '2.3',
-                    pontosInternacional: '3.5',
-                    embarquePrioritario: 'Sim',
-                    salasVips: 'Sim',
-                    bagagensNacional: '1',
-                    bagagensInternacional: '1',
-                    expiracao: '12 meses',
-                    vooCortesia: 'Não',
-                    acelerador: 'Sim',
-                    clubes: 'Sim'
-                },
-                {
-                    name: 'Gol Smiles Gold',
-                    image: 'https://i.imgur.com/lgGFk92.png',
-                    anuidade: 'R$ 514,80',
-                    isencaoAnuidade: 'R$ 2.000',
-                    pontosDomestico: '1.8',
-                    pontosInternacional: '3.0',
-                    embarquePrioritario: 'Sim',
-                    salasVips: 'Não',
-                    bagagensNacional: '1',
-                    bagagensInternacional: '0',
-                    expiracao: '12 meses',
-                    vooCortesia: 'Não',
-                    acelerador: 'Sim',
-                    clubes: 'Sim'
-                },
-                {
-                    name: 'Gol Smiles Internacional',
-                    image: 'https://i.imgur.com/SOZ4R8t.png',
-                    anuidade: 'R$ 468',
-                    isencaoAnuidade: 'Não disponível',
-                    pontosDomestico: '1.5',
-                    pontosInternacional: '1.5',
-                    embarquePrioritario: 'Não',
-                    salasVips: 'Não',
-                    bagagensNacional: '1',
-                    bagagensInternacional: '0',
-                    expiracao: '12 meses',
-                    vooCortesia: 'Não',
-                    acelerador: 'Não',
-                    clubes: 'Não'
-                },
-                {
-                    name: 'Nubank',
-                    image: 'https://i.imgur.com/GJvnJhE.png',
-                    anuidade: 'R$ 0',
-                    isencaoAnuidade: 'R$ 0',
-                    pontosDomestico: '0',
-                    pontosInternacional: '0',
-                    embarquePrioritario: 'Não',
-                    salasVips: 'Não',
-                    bagagensNacional: '0',
-                    bagagensInternacional: '0',
-                    expiracao: 'Não se aplica',
-                    vooCortesia: 'Não',
-                    acelerador: 'Não',
-                    clubes: 'Não'                    
-                },
-            ];
+    document.addEventListener('DOMContentLoaded', () => {
+        // A LISTA DE CARTÕES FOI REMOVIDA DAQUI.
+        // A variável "cardData" já existe porque foi carregada pelo "database.js".
 
-            const carouselTrack = document.getElementById('carousel-track');
-            let isDragging = false;
-            let startX;
-            let startRotation;
-            let currentRotation = 0;
-            let lastTimestamp = 0;
-            const autoRotationSpeed = 0.05;
+        const carouselTrack = document.getElementById('carousel-track');
+        let isDragging = false;
+        let startX;
+        let startRotation;
+        let currentRotation = 0;
+        let lastTimestamp = 0;
+        const autoRotationSpeed = 0.05;
 
-            const totalItems = cardData.length;
-            const itemWidth = 200;
-            const radius = (itemWidth / 2) / Math.tan(Math.PI / totalItems);
-            const angleStep = 360 / totalItems;
+        // O código continua a funcionar normalmente, pois "cardData" está disponível
+        const totalItems = cardData.length;
+        const itemWidth = 200;
+        const radius = (itemWidth / 2) / Math.tan(Math.PI / totalItems);
+        const angleStep = 360 / totalItems;
 
-            // Gera o carrossel a partir dos dados
+        // Gera o carrossel a partir dos dados
+        cardData.forEach(card => {
+            const item = document.createElement('div');
+            item.className = 'carousel-item';
+            item.innerHTML = `
+                <img src="${card.image}" alt="${card.name} Card" class="card-image" draggable="false">
+                <div class="card-title">${card.name}</div>
+            `;
+            carouselTrack.appendChild(item);
+        });
+
+        // Gera a tabela de comparação a partir dos dados
+        const comparisonTable = document.getElementById('comparison-table');
+        const features = [
+            { id: 'anuidade', label: 'Anuidade' },
+            { id: 'isencaoAnuidade', label: 'Isenção (gasto mensal)' },
+            { id: 'pontosDomestico', label: 'Pontos/Dólar (Nacional)' },
+            { id: 'pontosInternacional', label: 'Pontos/Dólar (Internacional)' },
+            { id: 'embarquePrioritario', label: 'Embarque Prioritário' },
+            { id: 'salasVips', label: 'Salas VIPs' },
+            { id: 'bagagensNacional', label: 'Bagagens Extras (Nacional)' },
+            { id: 'bagagensInternacional', label: 'Bagagens Extras (Internacional)' },
+            { id: 'expiracao', label: 'Expiração dos Pontos' },
+            { id: 'vooCortesia', label: 'Voo Cortesia' },
+            { id: 'acelerador', label: 'Acelerador de Pontos' },
+            { id: 'clubes', label: 'Clubes' }
+        ];
+
+        let tableHtml = `<div class="grid grid-cols-[1fr_repeat(${totalItems},minmax(120px,1fr))] gap-2 sm:gap-4 text-xs sm:text-sm">`;
+
+        // Cabeçalho da tabela com as imagens
+        tableHtml += `<div class="p-2 font-bold text-lg text-gray-400 sticky left-0 bg-gray-800 z-10">Benefício</div>`;
+        cardData.forEach(card => {
+            tableHtml += `
+                <div class="flex flex-col items-center justify-center p-2">
+                    <img src="${card.image}" alt="${card.name}" class="w-16 h-auto rounded-md shadow-md mb-2" draggable="false">
+                    <span class="text-xs text-center font-semibold">${card.name}</span>
+                </div>
+            `;
+        });
+        
+        // Linhas de dados
+        features.forEach((feature, i) => {
+            const bgColor = i % 2 === 0 ? 'bg-gray-700' : 'bg-gray-700/50';
+            tableHtml += `<div class="p-2 ${bgColor} rounded-md font-bold sticky left-0 z-10">${feature.label}</div>`;
             cardData.forEach(card => {
-                const item = document.createElement('div');
-                item.className = 'carousel-item';
-                item.innerHTML = `
-                    <img src="${card.image}" alt="${card.name} Card" class="card-image" draggable="false">
-                    <div class="card-title">${card.name}</div>
-                `;
-                carouselTrack.appendChild(item);
-            });
-
-            // Gera a tabela de comparação a partir dos dados
-            const comparisonTable = document.getElementById('comparison-table');
-            const features = [
-                { id: 'anuidade', label: 'Anuidade' },
-                { id: 'isencaoAnuidade', label: 'Isenção (gasto mensal)' },
-                { id: 'pontosDomestico', label: 'Pontos/Dólar (Nacional)' },
-                { id: 'pontosInternacional', label: 'Pontos/Dólar (Internacional)' },
-                { id: 'embarquePrioritario', label: 'Embarque Prioritário' },
-                { id: 'salasVips', label: 'Salas VIPs' },
-                { id: 'bagagensNacional', label: 'Bagagens Extras (Nacional)' },
-                { id: 'bagagensInternacional', label: 'Bagagens Extras (Internacional)' },
-                { id: 'expiracao', label: 'Expiração dos Pontos' },
-                { id: 'vooCortesia', label: 'Voo Cortesia' },
-                { id: 'acelerador', label: 'Acelerador de Pontos' },
-                { id: 'clubes', label: 'Clubes' }
-            ];
-
-            let tableHtml = `<div class="grid grid-cols-[1fr_repeat(${totalItems},minmax(120px,1fr))] gap-2 sm:gap-4 text-xs sm:text-sm">`;
-
-            // Cabeçalho da tabela com as imagens
-            tableHtml += `<div class="p-2 font-bold text-lg text-gray-400 sticky left-0 bg-gray-800 z-10">Benefício</div>`;
-            cardData.forEach(card => {
-                tableHtml += `
-                    <div class="flex flex-col items-center justify-center p-2">
-                        <img src="${card.image}" alt="${card.name}" class="w-16 h-auto rounded-md shadow-md mb-2" draggable="false">
-                        <span class="text-xs text-center font-semibold">${card.name}</span>
-                    </div>
-                `;
-            });
-            
-            // Linhas de dados
-            features.forEach((feature, i) => {
-                const bgColor = i % 2 === 0 ? 'bg-gray-700' : 'bg-gray-700/50';
-                tableHtml += `<div class="p-2 ${bgColor} rounded-md font-bold sticky left-0 z-10">${feature.label}</div>`;
-                cardData.forEach(card => {
-                    let displayValue = card[feature.id];
-                    if (displayValue === 'Sim') {
-                        displayValue = `<span class="text-green-400 text-2xl font-bold">✓</span>`;
-                    } else if (displayValue === 'Não') {
-                        displayValue = `<span class="text-red-400 text-2xl font-bold">✗</span>`;
-                    }
-                    tableHtml += `<div class="p-2 ${bgColor} rounded-md text-center flex items-center justify-center">${displayValue}</div>`;
-                });
-            });
-            
-            tableHtml += `</div>`;
-            comparisonTable.innerHTML = tableHtml;
-
-            const items = Array.from(carouselTrack.children);
-            
-            function updateCarousel() {
-                items.forEach((item, index) => {
-                    const angle = (index * angleStep) + currentRotation;
-                    const zIndex = Math.round(Math.cos((angle * Math.PI) / 180) * 100) + 100;
-                    
-                    item.style.transform = `translate(-50%, -50%) rotateY(${angle}deg) translateZ(${radius}px)`;
-                    item.style.zIndex = zIndex;
-                });
-            }
-
-            function setActiveCard() {
-                let closestAngle = 360;
-                let activeIndex = 0;
-
-                items.forEach((item, index) => {
-                    const angle = (index * angleStep) + currentRotation;
-                    const adjustedAngle = ((angle % 360) + 360) % 360; 
-                    
-                    const diff = Math.min(Math.abs(adjustedAngle), Math.abs(adjustedAngle - 360));
-                    
-                    if (diff < closestAngle) {
-                        closestAngle = diff;
-                        activeIndex = index;
-                    }
-                    
-                    item.classList.remove('active');
-                });
-                
-                items[activeIndex].classList.add('active');
-            }
-            
-            // Funções para controle de eventos
-            const onMouseMove = (e) => {
-                if (!isDragging) return;
-                e.preventDefault();
-                const walk = (e.pageX - startX) * 0.5; // Reduzida a sensibilidade
-                currentRotation = startRotation - walk; // Invertido para movimento mais natural
-                updateCarousel();
-                setActiveCard();
-            };
-
-            const onMouseUp = () => {
-                if (!isDragging) return;
-                isDragging = false;
-                carouselTrack.classList.remove('grabbing');
-                
-                // Adiciona transição para o "snap"
-                items.forEach(item => item.style.transition = 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)');
-                
-                const snapAngle = Math.round(currentRotation / angleStep) * angleStep;
-                currentRotation = snapAngle;
-                updateCarousel();
-                setActiveCard();
-
-                document.removeEventListener('mousemove', onMouseMove);
-                document.removeEventListener('mouseup', onMouseUp);
-            };
-            
-            carouselTrack.addEventListener('mousedown', (e) => {
-                isDragging = true;
-                carouselTrack.classList.add('grabbing');
-                // Remove transição durante o arrasto
-                items.forEach(item => item.style.transition = 'none');
-                startX = e.pageX;
-                startRotation = currentRotation;
-                
-                document.addEventListener('mousemove', onMouseMove);
-                document.addEventListener('mouseup', onMouseUp);
-            });
-
-            // Eventos para touch
-            const onTouchMove = (e) => {
-                if (!isDragging) return;
-                const walk = (e.touches[0].pageX - startX) * 0.5; // Reduzida a sensibilidade
-                currentRotation = startRotation - walk; // Invertido
-                updateCarousel();
-                setActiveCard();
-            };
-
-            const onTouchEnd = () => {
-                if (!isDragging) return;
-                isDragging = false;
-                carouselTrack.classList.remove('grabbing');
-                
-                items.forEach(item => item.style.transition = 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)');
-                
-                const snapAngle = Math.round(currentRotation / angleStep) * angleStep;
-                currentRotation = snapAngle;
-                updateCarousel();
-                setActiveCard();
-
-                document.removeEventListener('touchmove', onTouchMove);
-                document.removeEventListener('touchend', onTouchEnd);
-            };
-
-            carouselTrack.addEventListener('touchstart', (e) => {
-                isDragging = true;
-                carouselTrack.classList.add('grabbing');
-                items.forEach(item => item.style.transition = 'none');
-                startX = e.touches[0].pageX;
-                startRotation = currentRotation;
-
-                document.addEventListener('touchmove', onTouchMove, { passive: false });
-                document.addEventListener('touchend', onTouchEnd);
-            }, { passive: true });
-            
-            // Loop de animação para rotação automática
-            function animate(timestamp) {
-                if (!isDragging) {
-                    if (lastTimestamp !== 0) {
-                        const deltaTime = timestamp - lastTimestamp;
-                        currentRotation -= autoRotationSpeed * (deltaTime / 16.67);
-                        updateCarousel();
-                        setActiveCard();
-                    }
+                let displayValue = card[feature.id];
+                if (displayValue === 'Sim') {
+                    displayValue = `<span class="text-green-400 text-2xl font-bold">✓</span>`;
+                } else if (displayValue === 'Não') {
+                    displayValue = `<span class="text-red-400 text-2xl font-bold">✗</span>`;
                 }
-                lastTimestamp = timestamp;
-                requestAnimationFrame(animate);
-            }
+                tableHtml += `<div class="p-2 ${bgColor} rounded-md text-center flex items-center justify-center">${displayValue}</div>`;
+            });
+        });
+        
+        tableHtml += `</div>`;
+        comparisonTable.innerHTML = tableHtml;
 
-            // Configuração inicial
+        const items = Array.from(carouselTrack.children);
+        
+        function updateCarousel() {
+            items.forEach((item, index) => {
+                const angle = (index * angleStep) + currentRotation;
+                const zIndex = Math.round(Math.cos((angle * Math.PI) / 180) * 100) + 100;
+                
+                item.style.transform = `translate(-50%, -50%) rotateY(${angle}deg) translateZ(${radius}px)`;
+                item.style.zIndex = zIndex;
+            });
+        }
+
+        function setActiveCard() {
+            let closestAngle = 360;
+            let activeIndex = 0;
+
+            items.forEach((item, index) => {
+                const angle = (index * angleStep) + currentRotation;
+                const adjustedAngle = ((angle % 360) + 360) % 360; 
+                
+                const diff = Math.min(Math.abs(adjustedAngle), Math.abs(adjustedAngle - 360));
+                
+                if (diff < closestAngle) {
+                    closestAngle = diff;
+                    activeIndex = index;
+                }
+                
+                item.classList.remove('active');
+            });
+            
+            items[activeIndex].classList.add('active');
+        }
+        
+        // Funções para controle de eventos (todo o resto do seu código permanece igual)
+        const onMouseMove = (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const walk = (e.pageX - startX) * 0.5;
+            currentRotation = startRotation - walk;
             updateCarousel();
             setActiveCard();
-            requestAnimationFrame(animate);
+        };
+
+        const onMouseUp = () => {
+            if (!isDragging) return;
+            isDragging = false;
+            carouselTrack.classList.remove('grabbing');
+            
+            items.forEach(item => item.style.transition = 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)');
+            
+            const snapAngle = Math.round(currentRotation / angleStep) * angleStep;
+            currentRotation = snapAngle;
+            updateCarousel();
+            setActiveCard();
+
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        };
+        
+        carouselTrack.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            carouselTrack.classList.add('grabbing');
+            items.forEach(item => item.style.transition = 'none');
+            startX = e.pageX;
+            startRotation = currentRotation;
+            
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
         });
+
+        const onTouchMove = (e) => {
+            if (!isDragging) return;
+            const walk = (e.touches[0].pageX - startX) * 0.5;
+            currentRotation = startRotation - walk;
+            updateCarousel();
+            setActiveCard();
+        };
+
+        const onTouchEnd = () => {
+            if (!isDragging) return;
+            isDragging = false;
+            carouselTrack.classList.remove('grabbing');
+            
+            items.forEach(item => item.style.transition = 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)');
+            
+            const snapAngle = Math.round(currentRotation / angleStep) * angleStep;
+            currentRotation = snapAngle;
+            updateCarousel();
+            setActiveCard();
+
+            document.removeEventListener('touchmove', onTouchMove);
+            document.removeEventListener('touchend', onTouchEnd);
+        };
+
+        carouselTrack.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            carouselTrack.classList.add('grabbing');
+            items.forEach(item => item.style.transition = 'none');
+            startX = e.touches[0].pageX;
+            startRotation = currentRotation;
+
+            document.addEventListener('touchmove', onTouchMove, { passive: false });
+            document.addEventListener('touchend', onTouchEnd);
+        }, { passive: true });
+        
+        function animate(timestamp) {
+            if (!isDragging) {
+                if (lastTimestamp !== 0) {
+                    const deltaTime = timestamp - lastTimestamp;
+                    currentRotation -= autoRotationSpeed * (deltaTime / 16.67);
+                    updateCarousel();
+                    setActiveCard();
+                }
+            }
+            lastTimestamp = timestamp;
+            requestAnimationFrame(animate);
+        }
+
+        // Configuração inicial
+        updateCarousel();
+        setActiveCard();
+        requestAnimationFrame(animate);
+    });
     </script>
 </body>
 </html>
-

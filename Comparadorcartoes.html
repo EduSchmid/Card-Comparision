@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comparador de Milhas</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="database.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
@@ -131,21 +132,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const cardData = [
-                { name: 'Azul Itaú Visa Infinite', image: 'https://i.imgur.com/Ry7Dt14.png', anuidade: 'R$ 1.200', isencaoAnuidade: 'R$ 20.000', pontosDomestico: '3.0', pontosInternacional: '3.5', embarquePrioritario: 'Sim', salasVips: 'Sim', bagagensNacional: '3', bagagensInternacional: '3', expiracao: 'Não expiram', vooCortesia: 'Sim', acelerador: 'Sim', clubes: 'Sim' },
-                { name: 'Azul Itaú Platinum', image: 'https://i.imgur.com/NxEYy3Y.png', anuidade: 'R$ 900', isencaoAnuidade: 'R$ 4.000', pontosDomestico: '2.2', pontosInternacional: '2.6', embarquePrioritario: 'Sim', salasVips: 'Sim', bagagensNacional: '3', bagagensInternacional: '2', expiracao: '24 meses', vooCortesia: 'Não', acelerador: 'Sim', clubes: 'Sim' },
-                { name: 'Azul Itaú Gold', image: 'https://i.imgur.com/4eVr2n9.png', anuidade: 'R$ 504', isencaoAnuidade: 'R$ 2.000', pontosDomestico: '1.7', pontosInternacional: '2.0', embarquePrioritario: 'Sim', salasVips: 'Não', bagagensNacional: '2', bagagensInternacional: '1', expiracao: '24 meses', vooCortesia: 'Não', acelerador: 'Sim', clubes: 'Sim' },
-                { name: 'Azul Itaú Internacional', image: 'https://i.imgur.com/fQgOexM.png', anuidade: 'R$ 420', isencaoAnuidade: 'Não disponível', pontosDomestico: '1.4', pontosInternacional: '1.5', embarquePrioritario: 'Não', salasVips: 'Não', bagagensNacional: '1', bagagensInternacional: '1', expiracao: '24 meses', vooCortesia: 'Não', acelerador: 'Não', clubes: 'Não' },
-                { name: 'LATAM Pass Black', image: 'https://i.imgur.com/yG34Xdd.png', anuidade: 'R$ 1.200', isencaoAnuidade: 'R$ 20.000', pontosDomestico: '2.5', pontosInternacional: '3.5', embarquePrioritario: 'Sim', salasVips: 'Sim', bagagensNacional: '3', bagagensInternacional: '3', expiracao: 'Não expiram', vooCortesia: 'Sim', acelerador: 'Sim', clubes: 'Sim' },
-                { name: 'LATAM Pass Platinum', image: 'https://i.imgur.com/dBO5kuh.png', anuidade: 'R$ 744', isencaoAnuidade: 'R$ 4.000', pontosDomestico: '2.0', pontosInternacional: '2.0', embarquePrioritario: 'Sim', salasVips: 'Sim', bagagensNacional: '2', bagagensInternacional: '2', expiracao: '24 meses', vooCortesia: 'Não', acelerador: 'Sim', clubes: 'Sim' },
-                { name: 'LATAM Pass Gold', image: 'https://i.imgur.com/9dJkjJ7.png', anuidade: 'R$ 504', isencaoAnuidade: 'R$ 2.000', pontosDomestico: '1.6', pontosInternacional: '1.6', embarquePrioritario: 'Não', salasVips: 'Não', bagagensNacional: '1', bagagensInternacional: '1', expiracao: '24 meses', vooCortesia: 'Não', acelerador: 'Sim', clubes: 'Sim' },
-                { name: 'LATAM Pass Internacional', image: 'https://i.imgur.com/3hRyktn.png', anuidade: 'R$ 396', isencaoAnuidade: 'Não disponível', pontosDomestico: '1.3', pontosInternacional: '1.3', embarquePrioritario: 'Não', salasVips: 'Não', bagagensNacional: '0', bagagensInternacional: '0', expiracao: '12 meses', vooCortesia: 'Não', acelerador: 'Não', clubes: 'Não' },
-                { name: 'Gol Smiles Visa Infinite', image: 'https://i.imgur.com/kJgbRvx.png', anuidade: 'R$ 1.428', isencaoAnuidade: 'R$ 8.000', pontosDomestico: '3.0', pontosInternacional: '5.5', embarquePrioritario: 'Sim', salasVips: 'Sim', bagagensNacional: '1', bagagensInternacional: '1', expiracao: 'Não expiram', vooCortesia: 'Não', acelerador: 'Sim', clubes: 'Sim' },
-                { name: 'Gol Smiles Platinum', image: 'https://i.imgur.com/43DvHAP.png', anuidade: 'R$ 692', isencaoAnuidade: 'R$ 4.000', pontosDomestico: '2.3', pontosInternacional: '3.5', embarquePrioritario: 'Sim', salasVips: 'Sim', bagagensNacional: '1', bagagensInternacional: '1', expiracao: '12 meses', vooCortesia: 'Não', acelerador: 'Sim', clubes: 'Sim' },
-                { name: 'Gol Smiles Gold', image: 'https://i.imgur.com/lgGFk92.png', anuidade: 'R$ 514,80', isencaoAnuidade: 'R$ 2.000', pontosDomestico: '1.8', pontosInternacional: '3.0', embarquePrioritario: 'Sim', salasVips: 'Não', bagagensNacional: '1', bagagensInternacional: '0', expiracao: '12 meses', vooCortesia: 'Não', acelerador: 'Sim', clubes: 'Sim' },
-                { name: 'Gol Smiles Internacional', image: 'https://i.imgur.com/SOZ4R8t.png', anuidade: 'R$ 468', isencaoAnuidade: 'Não disponível', pontosDomestico: '1.5', pontosInternacional: '1.5', embarquePrioritario: 'Não', salasVips: 'Não', bagagensNacional: '1', bagagensInternacional: '0', expiracao: '12 meses', vooCortesia: 'Não', acelerador: 'Não', clubes: 'Não' },
-                { name: 'Nubank', image: 'https://i.imgur.com/GJvnJhE.png', anuidade: 'R$ 0', isencaoAnuidade: 'R$ 0', pontosDomestico: '0', pontosInternacional: '0', embarquePrioritario: 'Não', salasVips: 'Não', bagagensNacional: '0', bagagensInternacional: '0', expiracao: 'Não se aplica', vooCortesia: 'Não', acelerador: 'Não', clubes: 'Não' }
-            ];
+
 
             const cardGrid = document.getElementById('card-grid');
             const comparisonTable = document.getElementById('comparison-table');

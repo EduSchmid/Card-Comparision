@@ -30,7 +30,6 @@
 </head>
 <body class="bg-gray-900 text-gray-100">
 
-    <!-- Navbar -->
     <nav class="bg-gray-800 shadow-lg sticky top-0 z-50">
         <div class="container mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
@@ -42,15 +41,12 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
     <main class="container mx-auto px-4 py-12">
-        <!-- Formulário Container -->
         <div id="form-container" class="max-w-2xl mx-auto bg-gray-800 rounded-2xl shadow-2xl p-8">
             <h1 class="text-3xl md:text-4xl font-extrabold text-center mb-2">Encontre o Cartão Perfeito</h1>
             <p class="text-center text-gray-400 mb-8">Preencha o formulário abaixo para receber uma recomendação personalizada.</p>
             
             <form id="simulator-form" class="space-y-6">
-                <!-- Contato -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-300">E-mail (Opcional)</label>
@@ -62,7 +58,6 @@
                     </div>
                 </div>
 
-                <!-- Financeiro -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label for="renda" class="block text-sm font-medium text-gray-300">Renda Mensal (R$)</label>
@@ -74,7 +69,6 @@
                     </div>
                 </div>
 
-                <!-- Preferências de Viagem -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label for="companhia" class="block text-sm font-medium text-gray-300">Preferência de Cia. Aérea</label>
@@ -96,7 +90,6 @@
                     </div>
                 </div>
 
-                <!-- Viagem Internacional -->
                 <div>
                     <label class="block text-sm font-medium text-gray-300">Realiza/Gostaria de realizar viagem internacional nos próximos 2 anos?</label>
                     <div class="mt-2 flex items-center space-x-6">
@@ -111,7 +104,6 @@
                     </div>
                 </div>
 
-                <!-- LGPD e Comunicações -->
                 <div class="space-y-4 pt-4 border-t border-gray-700">
                     <div class="relative flex items-start">
                         <div class="flex items-center h-5">
@@ -126,7 +118,6 @@
                     </p>
                 </div>
 
-                <!-- Botão de Envio -->
                 <div>
                     <button type="submit" id="submit-button" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-lg font-bold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:ring-offset-gray-800 transition-transform transform hover:scale-105">
                         Ver minha recomendação
@@ -135,13 +126,11 @@
             </form>
         </div>
 
-        <!-- Resultados Container (inicialmente oculto) -->
         <div id="results-container" class="max-w-4xl mx-auto hidden">
             <h1 class="text-3xl md:text-4xl font-extrabold text-center mb-2">Cartões Recomendados para Você</h1>
             <p class="text-center text-gray-400 mb-8">Com base nas suas respostas, estas são as melhores opções que encontramos.</p>
             <div id="results-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Resultados serao inseridos aqui -->
-            </div>
+                </div>
              <div class="text-center mt-12">
                 <button id="reset-button" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition-transform transform hover:scale-105">
                     Simular Novamente
@@ -150,7 +139,6 @@
         </div>
     </main>
     
-    <!-- Modal de Alerta (inicialmente oculto) -->
     <div id="alert-modal" class="modal fixed inset-0 flex items-center justify-center p-4 hidden">
         <div class="bg-gray-800 rounded-lg shadow-xl p-8 max-w-sm w-full text-center">
             <h2 class="text-2xl font-bold text-red-400 mb-4">Atenção</h2>
@@ -160,6 +148,8 @@
             </button>
         </div>
     </div>
+
+    <script src="database.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -172,40 +162,8 @@
             const alertModal = document.getElementById('alert-modal');
             const closeModalButton = document.getElementById('close-modal');
             
-            let cardData = getInitialCardData();
-
-            function getInitialCardData() {
-                return [
-                    { name: 'Azul Itaú Visa Infinite', image: 'https://i.imgur.com/Ry7Dt14.png', anuidade: 'R$ 1.200', isencaoAnuidade: 'R$ 20.000', pontosDomestico: '3.0', pontosInternacional: '3.5', embarquePrioritario: 'Sim', salasVips: 'Sim', bagagensNacional: '3', bagagensInternacional: '3', expiracao: 'Não expiram', vooCortesia: 'Sim', acelerador: 'Sim', clubes: 'Sim', cia: 'azul' },
-                    { name: 'Azul Itaú Platinum', image: 'https://i.imgur.com/NxEYy3Y.png', anuidade: 'R$ 900', isencaoAnuidade: 'R$ 4.000', pontosDomestico: '2.2', pontosInternacional: '2.6', embarquePrioritario: 'Sim', salasVips: 'Sim', bagagensNacional: '3', bagagensInternacional: '2', expiracao: '24 meses', vooCortesia: 'Não', acelerador: 'Sim', clubes: 'Sim', cia: 'azul' },
-                    { name: 'Azul Itaú Gold', image: 'https://i.imgur.com/4eVr2n9.png', anuidade: 'R$ 504', isencaoAnuidade: 'R$ 2.000', pontosDomestico: '1.7', pontosInternacional: '2.0', embarquePrioritario: 'Sim', salasVips: 'Não', bagagensNacional: '2', bagagensInternacional: '1', expiracao: '24 meses', vooCortesia: 'Não', acelerador: 'Sim', clubes: 'Sim', cia: 'azul' },
-                    { name: 'Azul Itaú Internacional', image: 'https://i.imgur.com/fQgOexM.png', anuidade: 'R$ 420', isencaoAnuidade: 'Não disponível', pontosDomestico: '1.4', pontosInternacional: '1.5', embarquePrioritario: 'Não', salasVips: 'Não', bagagensNacional: '1', bagagensInternacional: '1', expiracao: '24 meses', vooCortesia: 'Não', acelerador: 'Não', clubes: 'Não', cia: 'azul' },
-                    { name: 'LATAM Pass Black', image: 'https://i.imgur.com/yG34Xdd.png', anuidade: 'R$ 1.200', isencaoAnuidade: 'R$ 20.000', pontosDomestico: '2.5', pontosInternacional: '3.5', embarquePrioritario: 'Sim', salasVips: 'Sim', bagagensNacional: '3', bagagensInternacional: '3', expiracao: 'Não expiram', vooCortesia: 'Sim', acelerador: 'Sim', clubes: 'Sim', cia: 'latam' },
-                    { name: 'LATAM Pass Platinum', image: 'https://i.imgur.com/dBO5kuh.png', anuidade: 'R$ 744', isencaoAnuidade: 'R$ 4.000', pontosDomestico: '2.0', pontosInternacional: '2.0', embarquePrioritario: 'Sim', salasVips: 'Sim', bagagensNacional: '2', bagagensInternacional: '2', expiracao: '24 meses', vooCortesia: 'Não', acelerador: 'Sim', clubes: 'Sim', cia: 'latam' },
-                    { name: 'LATAM Pass Gold', image: 'https://i.imgur.com/9dJkjJ7.png', anuidade: 'R$ 504', isencaoAnuidade: 'R$ 2.000', pontosDomestico: '1.6', pontosInternacional: '1.6', embarquePrioritario: 'Não', salasVips: 'Não', bagagensNacional: '1', bagagensInternacional: '1', expiracao: '24 meses', vooCortesia: 'Não', acelerador: 'Sim', clubes: 'Sim', cia: 'latam' },
-                    { name: 'LATAM Pass Internacional', image: 'https://i.imgur.com/3hRyktn.png', anuidade: 'R$ 396', isencaoAnuidade: 'Não disponível', pontosDomestico: '1.3', pontosInternacional: '1.3', embarquePrioritario: 'Não', salasVips: 'Não', bagagensNacional: '0', bagagensInternacional: '0', expiracao: '12 meses', vooCortesia: 'Não', acelerador: 'Não', clubes: 'Não', cia: 'latam' },
-                    { name: 'Gol Smiles Visa Infinite', image: 'https://i.imgur.com/kJgbRvx.png', anuidade: 'R$ 1.428', isencaoAnuidade: 'R$ 8.000', pontosDomestico: '3.0', pontosInternacional: '5.5', embarquePrioritario: 'Sim', salasVips: 'Sim', bagagensNacional: '1', bagagensInternacional: '1', expiracao: 'Não expiram', vooCortesia: 'Não', acelerador: 'Sim', clubes: 'Sim', cia: 'gol' },
-                    { name: 'Gol Smiles Platinum', image: 'https://i.imgur.com/43DvHAP.png', anuidade: 'R$ 692', isencaoAnuidade: 'R$ 4.000', pontosDomestico: '2.3', pontosInternacional: '3.5', embarquePrioritario: 'Sim', salasVips: 'Sim', bagagensNacional: '1', bagagensInternacional: '1', expiracao: '12 meses', vooCortesia: 'Não', acelerador: 'Sim', clubes: 'Sim', cia: 'gol' },
-                    { name: 'Gol Smiles Gold', image: 'https://i.imgur.com/lgGFk92.png', anuidade: 'R$ 514,80', isencaoAnuidade: 'R$ 2.000', pontosDomestico: '1.8', pontosInternacional: '3.0', embarquePrioritario: 'Sim', salasVips: 'Não', bagagensNacional: '1', bagagensInternacional: '0', expiracao: '12 meses', vooCortesia: 'Não', acelerador: 'Sim', clubes: 'Sim', cia: 'gol' },
-                    { name: 'Gol Smiles Internacional', image: 'https://i.imgur.com/SOZ4R8t.png', anuidade: 'R$ 468', isencaoAnuidade: 'Não disponível', pontosDomestico: '1.5', pontosInternacional: '1.5', embarquePrioritario: 'Não', salasVips: 'Não', bagagensNacional: '1', bagagensInternacional: '0', expiracao: '12 meses', vooCortesia: 'Não', acelerador: 'Não', clubes: 'Não', cia: 'gol' },
-                    {
-                        name: 'Nubank',
-                        image: 'https://i.imgur.com/GJvnJhE.png',
-                        anuidade: 'R$ 0',
-                        isencaoAnuidade: 'R$ 0',
-                        pontosDomestico: '0',
-                        pontosInternacional: '0',
-                        embarquePrioritario: 'Não',
-                        salasVips: 'Não',
-                        bagagensNacional: '0',
-                        bagagensInternacional: '0',
-                        expiracao: 'Não se aplica',
-                        vooCortesia: 'Não',
-                        acelerador: 'Não',
-                        clubes: 'Não'
-                    }
-                ];
-            }
+            // A variável `cardData` já existe, pois foi carregada pelo `database.js`.
+            // A função getInitialCardData() foi removida.
 
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
@@ -215,12 +173,12 @@
                 const formData = new FormData(form);
                 const data = Object.fromEntries(formData.entries());
                 
+                // A lógica de recomendação agora usa a variável global `cardData`.
                 const recommendations = getRecommendations(data, cardData);
                 
                 const userRenda = parseFloat(data.renda);
                 const userGasto = parseFloat(data.gasto);
 
-                // Nova regra de negócio: Se renda ou gasto for < 2000 E nenhuma das recomendações tiver isenção de anuidade
                 const hasNoAnnualFeeCard = cardData.some(card => cleanNumber(card.anuidade) === 0);
                 
                 if ((userRenda < 2000 || userGasto < 2000) && !hasNoAnnualFeeCard) {
@@ -250,7 +208,6 @@
             return parseFloat(value.replace('R$', '').replace(/\./g, '').replace(',', '.').trim()) || 0;
         }
 
-        // A função getRecommendations foi atualizada para lidar com valores nulos ou negativos
         function getRecommendations(userInput, cardDatabase) {
             const userGasto = parseFloat(userInput.gasto);
             const userRenda = parseFloat(userInput.renda);
@@ -258,12 +215,10 @@
             const scoredCards = cardDatabase.map(card => {
                 let score = 0;
                 
-                // Adiciona pontos se o usuário tiver uma preferência de companhia aérea e ela coincidir com o cartão.
                 if (userInput.companhia && userInput.companhia !== 'nenhuma' && userInput.companhia === card.cia) {
                     score += 50;
                 }
 
-                // Apenas adiciona pontos para isenção se o gasto for suficiente.
                 const anuidade = cleanNumber(card.anuidade);
                 const gastoParaIsencao = cleanNumber(card.isencaoAnuidade);
 
@@ -271,23 +226,19 @@
                     score += 40;
                 }
 
-                // Adiciona uma penalidade significativa para cartões com anuidade alta se o gasto for baixo
                 if (anuidade > 800 && userGasto < 2000) {
                     score -= 100;
                 }
 
-                // Adiciona um bônus significativo para cartões com anuidade zero para perfis de baixa renda/gasto
                 if (anuidade === 0 && (userRenda < 2000 || userGasto < 2000)) {
                     score += 150;
                 }
 
-                // Adiciona pontos para benefícios de viagem se o usuário viaja.
                 if (userInput['viagens-ano'] !== '0') {
                     if (card.salasVips === 'Sim') score += 30;
                     if (card.embarquePrioritario === 'Sim') score += 15;
                 }
 
-                // Adiciona pontos para viagens internacionais ou domésticas.
                 if (userGasto > 0) {
                     if (userInput.internacional === 'sim') {
                         score += parseFloat(card.pontosInternacional) * 10;
@@ -297,7 +248,6 @@
                     }
                 }
 
-                // Adiciona pontos para expiração de pontos.
                 if (card.expiracao === 'Não expiram') {
                     score += 20;
                 }
