@@ -130,8 +130,8 @@
             <h1 class="text-3xl md:text-4xl font-extrabold text-center mb-2">Cartões Recomendados para Você</h1>
             <p class="text-center text-gray-400 mb-8">Com base nas suas respostas, estas são as melhores opções que encontramos.</p>
             <div id="results-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                </div>
-             <div class="text-center mt-12">
+            </div>
+            <div class="text-center mt-12">
                 <button id="reset-button" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition-transform transform hover:scale-105">
                     Simular Novamente
                 </button>
@@ -148,10 +148,36 @@
             </button>
         </div>
     </div>
-
+    
     <script src="database.js"></script>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyASDVPkdYp_pnXQ1EslFAian8avJDjwvS8",
+            authDomain: "site-de-milhas.firebaseapp.com",
+            projectId: "site-de-milhas",
+            storageBucket: "site-de-milhas.firebasestorage.app",
+            messagingSenderId: "409343969082",
+            appId: "1:409343969082:web:f9e5795f925204a718b203",
+            measurementId: "G-2HYHSQ0Z7X"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Função para salvar os dados no Firestore
+        async function salvarDados(data) {
+            try {
+                const docRef = await addDoc(collection(db, "respostas"), data);
+                console.log("Documento salvo com ID: ", docRef.id);
+            } catch (e) {
+                console.error("Erro ao adicionar documento: ", e);
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('simulator-form');
             const formContainer = document.getElementById('form-container');
@@ -161,9 +187,6 @@
             const submitButton = document.getElementById('submit-button');
             const alertModal = document.getElementById('alert-modal');
             const closeModalButton = document.getElementById('close-modal');
-            
-            // A variável `cardData` já existe, pois foi carregada pelo `database.js`.
-            // A função getInitialCardData() foi removida.
 
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
@@ -172,10 +195,7 @@
 
                 const formData = new FormData(form);
                 const data = Object.fromEntries(formData.entries());
-                
-                // A lógica de recomendação agora usa a variável global `cardData`.
-                const recommendations = getRecommendations(data, cardData);
-                
+
                 const userRenda = parseFloat(data.renda);
                 const userGasto = parseFloat(data.gasto);
 
@@ -186,7 +206,20 @@
                     submitButton.disabled = false;
                     submitButton.textContent = 'Ver minha recomendação';
                 } else {
+                    const recommendations = getRecommendations(data, cardData);
                     displayResults(recommendations, resultsGrid, formContainer, resultsContainer);
+                    
+                    salvarDados({
+                        email: data.email,
+                        whatsapp: data.whatsapp,
+                        renda: userRenda,
+                        gasto: userGasto,
+                        companhiaAerea: data.companhia,
+                        viagensAno: data['viagens-ano'],
+                        viagemInternacional: data.internacional,
+                        desejaComunicacoes: data.comunicacoes === 'on' ? 'Sim' : 'Não',
+                        dataEnvio: new Date().toISOString()
+                    });
                 }
             });
             
@@ -203,6 +236,7 @@
             });
         });
 
+        // Funções de apoio
         function cleanNumber(value) {
             if (typeof value !== 'string') return 0;
             return parseFloat(value.replace('R$', '').replace(/\./g, '').replace(',', '.').trim()) || 0;
@@ -211,7 +245,7 @@
         function getRecommendations(userInput, cardDatabase) {
             const userGasto = parseFloat(userInput.gasto);
             const userRenda = parseFloat(userInput.renda);
-
+            
             const scoredCards = cardDatabase.map(card => {
                 let score = 0;
                 
